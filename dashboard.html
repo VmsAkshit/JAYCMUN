@@ -16,7 +16,7 @@
     <div class="container" style="min-height:50vh;">
         <div class="card" style="width:90%; max-width:500px; text-align:left;">
             <h3>Register for MUN</h3>
-            <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+            <form action="https://formspree.io/f/xqeezjdv" method="POST">
                 <input type="text" name="name" placeholder="Full Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <select name="committee">
@@ -34,9 +34,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="config.js"></script>
     <script src="auth.js"></script>
+    
     <script>
-        checkAuth('user'); // Security Check
+        checkAuth('user'); // Security Check ensuring only logged-in users see this
         
+        // Fetch meetings from Firebase
         db.collection('meetings').get().then(snap => {
             const container = document.getElementById('muns-list');
             snap.forEach(doc => {
