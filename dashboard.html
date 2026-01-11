@@ -6,28 +6,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        <header style="display:flex; justify-content:space-between; align-items:center;">
-            <h1>Upcoming Conferences</h1>
-            <button onclick="logout()" style="width:auto; background:#d32f2f;">Logout</button>
-        </header>
+    <div style="padding:20px; display:flex; justify-content:space-between;">
+        <h2>Upcoming MUNs</h2>
+        <button onclick="logout()" style="width:100px; background:#e53935;">Logout</button>
+    </div>
 
-        <div id="meetings-list" class="meeting-grid"></div>
+    <div id="muns-list" class="grid"></div>
 
-        <h2 style="margin-top:40px;">Register for Next MUN</h2>
-        <div class="card" style="width: 100%; text-align: left;">
-            <form action="https://formspree.io/f/your_form_id" method="POST">
-                <label>Your Name:</label>
-                <input type="text" name="name" required>
-                <label>Email:</label>
-                <input type="email" name="email" required>
-                <label>Preferred Committee:</label>
+    <div class="container" style="min-height:50vh;">
+        <div class="card" style="width:90%; max-width:500px; text-align:left;">
+            <h3>Register for MUN</h3>
+            <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email" required>
                 <select name="committee">
                     <option>UNSC</option>
-                    <option>DISEC</option>
                     <option>UNHRC</option>
+                    <option>DISEC</option>
                 </select>
-                <button type="submit">Submit Application</button>
+                <button type="submit">Send Application</button>
             </form>
         </div>
     </div>
@@ -36,36 +33,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="config.js"></script>
-
+    <script src="auth.js"></script>
     <script>
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        // Load Meetings
-        db.collection('meetings').get().then((snapshot) => {
-            const list = document.getElementById('meetings-list');
-            snapshot.forEach(doc => {
+        checkAuth('user'); // Security Check
+        
+        db.collection('meetings').get().then(snap => {
+            const container = document.getElementById('muns-list');
+            snap.forEach(doc => {
                 const data = doc.data();
-                const div = document.createElement('div');
-                div.className = 'meeting-card';
-                div.innerHTML = `
-                    <h3>${data.title}</h3>
-                    <p>Date: ${data.date}</p>
-                    <p>${data.description}</p>
-                    ${data.active ? `<button onclick="joinRoom('${data.roomId}')">Join Conference Room</button>` : '<p style="color:grey;">Not started yet</p>'}
+                container.innerHTML += `
+                    <div class="meeting-card">
+                        <h3>${data.title}</h3>
+                        <p>${data.desc}</p>
+                        ${data.active ? `<button onclick="window.location.href='conference.html?room=${data.roomId}'">JOIN CONFERENCE</button>` : '<p style="color:gray">Not Started</p>'}
+                    </div>
                 `;
-                list.appendChild(div);
             });
         });
-
-        function joinRoom(roomId) {
-            window.location.href = `room.html?room=${roomId}&role=attendee`;
-        }
-
-        function logout() {
-            auth.signOut().then(() => window.location.href = "index.html");
-        }
     </script>
 </body>
 </html>
