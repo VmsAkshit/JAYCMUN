@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Admin Control Center</h1>
+        
+        <div class="card" style="width:100%; max-width:600px;">
+            <h3>Create New Conference</h3>
+            <input type="text" id="m-title" placeholder="Conference Title (e.g., Winter MUN)">
+            <input type="date" id="m-date">
+            <input type="text" id="m-desc" placeholder="Short Description">
+            <button onclick="createMeeting()">Schedule Meeting</button>
+        </div>
+
+        <h2>Manage Meetings</h2>
+        <div id="admin-list" class="meeting-grid"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="config.js"></script>
+
+    <script>
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function createMeeting() {
+            const title = document.getElementById('m-title').value;
+            const date = document.getElementById('m-date').value;
+            const desc = document.getElementById('m-desc').value;
+            const roomId = "room_" + Math.floor(Math.random() * 10000);
+
+            db.collection('meetings').add({
+                title: title,
+                date: date,
+                description: desc,
+                roomId: roomId,
+                active: false
+            }).then(() => {
+                alert("Meeting Scheduled!");
+                location.reload();
+            });
+        }
+
+        db.collection('meetings').get().then((snapshot) => {
+            const list = document.getElementById('admin-list');
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const div = document.createElement('div');
+                div.className = 'meeting-card';
+                div.innerHTML = `
+                    <h3>${data.title} (${data.roomId})</h3>
+                    <p>Status: ${data.active ? 'LIVE' : 'Scheduled'}</p>
+                    <button onclick="startMeeting('${doc.id}', '${data.roomId}')" style="background:green;">Start / Join as Host</button>
+                    <button onclick="deleteMeeting('${doc.id}')" style="background:#e53935;">Delete</button>
+                `;
+                list.appendChild(div);
+            });
+        });
+
+        function startMeeting(docId, roomId) {
+            // Set active to true
+            db.collection('meetings').doc(docId).update({ active: true });
+            window.location.href = `room.html?room=${roomId}&role=host`;
+        }
+
+        function deleteMeeting(docId) {
+            if(confirm("Delete this meeting?")) {
+                db.collection('meetings').doc(docId).delete().then(() => location.reload());
+            }
+        }
+    </script>
+</body>
+</html>
