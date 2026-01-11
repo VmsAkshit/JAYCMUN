@@ -14,4 +14,4 @@ const firebaseConfig = {
 // 2. Agora Configuration 
 // IMPORTANT: You still need to get this from the Agora.io console.
 // Without this, the video calls will not connect.
-const agoraAppId = "PASTE_YOUR_AGORA_APP_ID_HERE";
+const agoraAppId = "c75e050a6d3c4cfaa42edb8c18c06eb7";
