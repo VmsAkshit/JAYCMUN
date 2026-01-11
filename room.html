@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JaycMun Conference Room</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    
+    <div id="video-container"></div>
+
+    <div class="controls-bar">
+        <button id="mic-btn" class="control-btn"><i class="fas fa-microphone"></i></button>
+        <button id="cam-btn" class="control-btn"><i class="fas fa-video"></i></button>
+        
+        <button id="react-btn" class="control-btn" style="background: #ff9800;">
+            <i class="fas fa-thumbs-up"></i>
+        </button>
+        
+        <button id="leave-btn" class="control-btn" style="background: #e53935;">
+            <i class="fas fa-phone-slash"></i>
+        </button>
+    </div>
+
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.11.0.js"></script>
+    <script src="config.js"></script>
+    <script src="video-room.js"></script>
+</body>
+</html>
