@@ -1,14 +1,17 @@
 // config.js
 
-// 1. Firebase Config (Get this from Firebase Console)
+// 1. Firebase Configuration (Updated with your specific keys)
 const firebaseConfig = {
-    apiKey: "PASTE_API_KEY_HERE",
-    authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-    projectId: "PASTE_PROJECT_ID",
-    storageBucket: "PASTE_PROJECT_ID.appspot.com",
-    messagingSenderId: "PASTE_SENDER_ID",
-    appId: "PASTE_APP_ID"
+    apiKey: "AIzaSyAxUsVjZc3A8D1pNAxqcOd4gkdvkpn-kLs",
+    authDomain: "jaycmun-4f2cf.firebaseapp.com",
+    projectId: "jaycmun-4f2cf",
+    storageBucket: "jaycmun-4f2cf.firebasestorage.app",
+    messagingSenderId: "771042098346",
+    appId: "1:771042098346:web:cef5dddd892788f6f224d3",
+    measurementId: "G-1Y3EKYR648"
 };
 
-// 2. Agora Config (Get App ID from Agora.io Console)
-const agoraAppId = "PASTE_AGORA_APP_ID_HERE";
+// 2. Agora Configuration 
+// IMPORTANT: You still need to get this from the Agora.io console.
+// Without this, the video calls will not connect.
+const agoraAppId = "PASTE_YOUR_AGORA_APP_ID_HERE";
