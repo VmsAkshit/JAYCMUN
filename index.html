@@ -2,32 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>JaycMun | Login</title>
+    <title>JaycMun - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="auth-container">
+    <div class="container">
         <h1>JaycMun Platform</h1>
         <div class="card">
-            <h2 id="form-title">User Login</h2>
-            <input type="email" id="email" placeholder="Email Address">
-            <input type="password" id="password" placeholder="Password">
-            
-            <button onclick="handleLogin()">Login</button>
-            <button onclick="handleSignup()" style="background: #333;">Register New Account</button>
-            
-            <hr>
-            <p style="font-size: 0.9rem; color: #aaa;">Are you an Admin?</p>
-            <button onclick="toggleAdminMode()" id="admin-toggle">Switch to Admin Login</button>
+            <h3>Login</h3>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="pass" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()" style="background:#444">Register as New User</button>
         </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    
     <script src="config.js"></script>
-    <script src="auth.js"></script>
+    
+    <script>
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        function login() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            auth.signInWithEmailAndPassword(email, pass).then((cred) => {
+                db.collection('users').doc(cred.user.uid).get().then(doc => {
+                    const role = doc.data().role;
+                    if(role === 'admin') window.location.href = "admin.html";
+                    else window.location.href = "dashboard.html";
+                });
+            }).catch(e => alert(e.message));
+        }
+
+        function register() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            auth.createUserWithEmailAndPassword(email, pass).then((cred) => {
+                // Default role is user
+                db.collection('users').doc(cred.user.uid).set({ email: email, role: 'user' })
+                .then(() => window.location.href = "dashboard.html");
+            }).catch(e => alert(e.message));
+        }
+    </script>
 </body>
 </html>
